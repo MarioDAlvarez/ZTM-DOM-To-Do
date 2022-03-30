@@ -1,25 +1,20 @@
-var button = document.getElementById("enter");
+var button = document.getElementById("add");
 var input = document.getElementById("userinput");
-var ul = document.querySelector("ul");
+var list = document.querySelector("ul");
 
-input.focus();
 
+
+function inputFocus (){
+	input.focus();
+}
 function inputLength() {
 	return input.value.length;
-}
-
-function createListElement() {
-	var li = document.createElement("li");
-	li.appendChild(document.createTextNode(input.value));
-	// var deleteButton = addDeleteButton();
-	// li.appendChild(deleteButton)
-	ul.appendChild(li);
-	input.value = "";
 }
 
 function addListAfterClick() {
 	if (inputLength() > 0) {
 		createListElement();
+		inputFocus();
 	}
 }
 
@@ -28,28 +23,50 @@ function addListAfterKeypress(event) {
 		createListElement();
 	}
 }
+function createListElement() {
+	var checkbox = document.createElement("input");
+	checkbox.setAttribute("type", "checkbox");
+	checkbox.setAttribute("id", input.value);
+	checkbox.addEventListener('click', toggleDone);
 
-// function toggleLineThrough() {
-// 	this.classList.toggle("done");
-// }
+	var label = document.createElement("label");
+	label.setAttribute("for", input.value);
 
-function addDeleteButton() {
+	var li = document.createElement("li");
+
 	var deleteButton = document.createElement("button");
 	deleteButton.innerHTML = "Delete"
-	// deleteButton.addEventListener("click", deleteLi)
+	deleteButton.addEventListener("click", deleteLi)
+
+	label.appendChild(checkbox);
+	label.append(`${input.value}`);
+	label.appendChild(deleteButton);
+	li.appendChild(label);
+	list.insertBefore(li, list.firstChild);
+	input.value = "";
 }
 
-// function deleteLi(event){
-// 	this.parentNode.remove();
-// 	this.remove();
-// }
+function deleteLi(){
+	this.parentNode.parentNode.remove();
+	inputFocus();
+}
+
+function toggleDone(item) {
+	var item = this.parentNode;
+	item.classList.toggle("done");
+	var listItem = this.parentNode.parentNode;
+	if (item.classList.contains("done") == true) {
+		list.appendChild(listItem);
+	} else {
+		list.insertBefore(listItem, list.firstChild)
+	}
+	inputFocus();
+}
 
 button.addEventListener("click", addListAfterClick);
 
 input.addEventListener("keypress", addListAfterKeypress);
 
-// for (i = 0; i < listItem.length; i++) {
+document.addEventListener("click", inputFocus);
 
-// listItem[i].addEventListener("click", toggleLineThrough);
-// addDeleteButton(i);
-// }
+inputFocus();

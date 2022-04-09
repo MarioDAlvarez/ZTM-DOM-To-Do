@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>To-Do List</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-	<div>
-	<h1>Lister</h1>
-	</div>
-	<div>
-		<p id="first">Create a name for your list to begin adding items.</p>
-		<input id="listinput" type="text" placeholder="List Name">
-		<button id="add">Add</button>
-	</div>
-	<div id="listDiv">
-	</div>
-	<script type="text/javascript" src="script.js"></script>
-</body>
+  <head>
+    <title>To-Do List</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div>
+      <h1>Lister</h1>
+    </div>
+    <div>
+      <p id="first">Create a name for your list to begin adding items.</p>
+      <form data-new-list-form>
+        <label for="listinput">
+          <input type="submit" value="+" />
+          <input
+            id="listinput"
+            type="text"
+            name="listInput"
+            placeholder="List Name"
+            data-new-list-input
+            autocomplete="off"
+          />
+        </label>
+      </form>
+    </div>
+    <div id="listDiv" data-lists></div>
+    <script type="text/javascript" src="script.js"></script>
+  </body>
 </html>

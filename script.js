@@ -16,39 +16,46 @@ function listInputFocus() {
 
 function createList(name) {
   var div1 = document.createElement("div");
+  div1.setAttribute("class", "col");
   var div2 = document.createElement("div");
   var div3 = document.createElement("div");
   var div4 = document.createElement("div");
+  var div5 = document.createElement("div");
+  div5.setAttribute("class", "row");
 
   var listTitle = document.createElement("h2");
   listTitle.innerText = name;
+  listTitle.setAttribute("class", "text-break");
   div2.append(listTitle);
 
   var buttonElement = document.createElement("input");
   buttonElement.setAttribute("type", "submit");
   buttonElement.setAttribute("value", "+");
+  buttonElement.setAttribute("class", "col-1");
 
   var itemInputElement = document.createElement("input");
   itemInputElement.setAttribute("placeholder", "List Item");
-  itemInputElement.setAttribute("class", "iteminput");
+  itemInputElement.setAttribute("class", "iteminput col-10");
   itemInputElement.setAttribute("id", name);
   itemInputElement.setAttribute("autocomplete", "off");
 
   var labelElement = document.createElement("label");
+  labelElement.setAttribute("class", "row");
   labelElement.setAttribute("for", name);
   labelElement.append(buttonElement, itemInputElement);
-  var formElement = document.createElement("form");
 
-  formElement.appendChild(labelElement);
+  var formElement = document.createElement("form");
+  formElement.append(labelElement);
   div3.append(formElement);
 
   var listElement = document.createElement("ul");
   div4.append(listElement);
 
   var clearButton = document.createElement("button");
+  clearButton.setAttribute("class", "col-6");
   clearButton.innerHTML = "Clear Completed";
   clearButton.addEventListener("click", (e) => {
-    var items = e.target.parentNode.getElementsByTagName("li");
+    var items = e.target.parentNode.parentNode.getElementsByTagName("li");
     for (i = items.length - 1; i >= 0; i--) {
       if (items.item(i).classList.contains("done") == true) {
         items.item(i).remove();
@@ -58,13 +65,16 @@ function createList(name) {
   });
 
   var deleteButton = document.createElement("button");
+  deleteButton.setAttribute("class", "col-6");
   deleteButton.innerHTML = "Delete List";
   deleteButton.addEventListener("click", (e) => {
-    e.target.parentNode.remove();
+    e.target.parentNode.parentNode.remove();
     listInputFocus();
   });
 
-  div1.append(div2, div3, div4, clearButton, deleteButton);
+  div5.append(clearButton, deleteButton);
+
+  div1.append(div2, div3, div4, div5);
   listsContainer.appendChild(div1);
 
   formElement.addEventListener("submit", (e) => {
@@ -82,30 +92,32 @@ function createListItem(item, list, itemInput) {
   var checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("id", item);
+  checkbox.setAttribute("class", "col-1");
 
   var label = document.createElement("label");
   label.setAttribute("for", item);
+  label.setAttribute("class", "col-9 text-break");
 
   var li = document.createElement("li");
+  li.setAttribute("class", "row d-flex align-items-baseline");
 
   var deleteButton = document.createElement("button");
-  deleteButton.innerHTML = "X";
+  deleteButton.innerHTML = "&#215";
   deleteButton.addEventListener("click", (e) => {
     e.target.parentNode.remove();
     itemInput.focus();
   });
+  deleteButton.setAttribute("class", "delete-button col-2");
 
-  label.appendChild(checkbox);
   label.append(`${item}`);
-  li.appendChild(label);
-  li.appendChild(deleteButton);
+  li.append(checkbox, label, deleteButton);
 
   list.insertBefore(li, list.firstChild);
 
   checkbox.addEventListener("click", (e) => {
-    var item = e.target.parentNode.parentNode;
+    var item = e.target.parentNode;
     item.classList.toggle("done");
-    var list = e.target.parentNode.parentNode.parentNode;
+    var list = e.target.parentNode.parentNode;
     if (item.classList.contains("done") == true) {
       list.appendChild(item);
     } else {
@@ -113,6 +125,8 @@ function createListItem(item, list, itemInput) {
     }
   });
 }
+
+listInputFocus();
 
 // function toggleDone() {
 //   console.log(object);
@@ -177,8 +191,6 @@ function createListItem(item, list, itemInput) {
 // button.addEventListener("click", addListAfterClick);
 
 // listInput.addEventListener("keypress", addListAfterKeypress);
-
-listInputFocus();
 
 // function createItemInput() {
 // 	var itemInput = document.createElement("input");

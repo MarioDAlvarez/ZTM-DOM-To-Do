@@ -15,18 +15,16 @@ function listInputFocus() {
 }
 
 function createList(name) {
-  var div1 = document.createElement("div");
-  div1.setAttribute("class", "col");
-  var div2 = document.createElement("div");
-  var div3 = document.createElement("div");
-  var div4 = document.createElement("div");
-  var div5 = document.createElement("div");
-  div5.setAttribute("class", "row");
-
   var listTitle = document.createElement("h2");
   listTitle.innerText = name;
   listTitle.setAttribute("class", "text-break");
-  div2.append(listTitle);
+  listTitle.addEventListener("click", editData);
+
+  var closeButton = document.createElement("button");
+  closeButton.setAttribute("class", "btn-close");
+  var div2 = document.createElement("div");
+  div2.setAttribute("class", "fodal-header");
+  div2.append(listTitle, closeButton);
 
   var buttonElement = document.createElement("input");
   buttonElement.setAttribute("type", "submit");
@@ -46,36 +44,53 @@ function createList(name) {
 
   var formElement = document.createElement("form");
   formElement.append(labelElement);
+  var div3 = document.createElement("div");
   div3.append(formElement);
 
   var listElement = document.createElement("ul");
+  var div4 = document.createElement("div");
   div4.append(listElement);
 
-  var clearButton = document.createElement("button");
-  clearButton.setAttribute("class", "col-6");
-  clearButton.innerHTML = "Clear Completed";
-  clearButton.addEventListener("click", (e) => {
-    var items = e.target.parentNode.parentNode.getElementsByTagName("li");
-    for (i = items.length - 1; i >= 0; i--) {
-      if (items.item(i).classList.contains("done") == true) {
-        items.item(i).remove();
-      }
-    }
-    itemInputElement.focus();
-  });
+  var div8 = document.createElement("div");
+  div8.setAttribute("class", "fodal-body");
+  div8.append(div3, div4);
 
-  var deleteButton = document.createElement("button");
-  deleteButton.setAttribute("class", "col-6");
-  deleteButton.innerHTML = "Delete List";
-  deleteButton.addEventListener("click", (e) => {
-    e.target.parentNode.parentNode.remove();
-    listInputFocus();
-  });
+  // var clearButton = document.createElement("button");
+  // clearButton.setAttribute("class", "col-6");
+  // clearButton.innerHTML = "Clear Completed";
+  // clearButton.addEventListener("click", (e) => {
+  //   var items = e.target.parentNode.parentNode.getElementsByTagName("li");
+  //   for (i = items.length - 1; i >= 0; i--) {
+  //     if (items.item(i).classList.contains("done") == true) {
+  //       items.item(i).remove();
+  //     }
+  //   }
+  //   itemInputElement.focus();
+  // });
 
-  div5.append(clearButton, deleteButton);
+  // var deleteButton = document.createElement("button");
+  // deleteButton.setAttribute("class", "col-6");
+  // deleteButton.innerHTML = "Delete List";
+  // deleteButton.addEventListener("click", (e) => {
+  //   e.target.parentNode.parentNode.remove();
+  //   listInputFocus();
+  // });
 
-  div1.append(div2, div3, div4, div5);
-  listsContainer.appendChild(div1);
+  // div5.append(clearButton, deleteButton);
+  // var div5 = document.createElement("div");
+  // div5.setAttribute("class", "row");
+
+  var div1 = document.createElement("div");
+  div1.setAttribute("class", "fodal-content");
+  div1.append(div2, div8 /*div5*/);
+  var div6 = document.createElement("div");
+  div6.setAttribute("class", "fodal-dialog");
+  div6.append(div1);
+  var div7 = document.createElement("div");
+  div7.setAttribute("class", "fodal");
+  div7.append(div6);
+
+  listsContainer.appendChild(div7);
 
   formElement.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -99,10 +114,10 @@ function createListItem(item, list, itemInput) {
   label.setAttribute("class", "col-9 text-break");
 
   var li = document.createElement("li");
-  li.setAttribute("class", "row d-flex align-items-baseline");
+  li.setAttribute("class", "row align-items-baseline");
 
   var deleteButton = document.createElement("button");
-  deleteButton.innerHTML = "&#215";
+  // deleteButton.innerHTML = "&#215";
   deleteButton.addEventListener("click", (e) => {
     e.target.parentNode.remove();
     itemInput.focus();
@@ -124,6 +139,26 @@ function createListItem(item, list, itemInput) {
       list.insertBefore(item, list.firstChild);
     }
   });
+}
+
+function editData(e) {
+  const el = e.target;
+  const input = document.createElement("input");
+  input.setAttribute("class", "list-name");
+  input.setAttribute("value", el.textContent);
+  input.selectionStart = input.selectionEnd = input.value.length;
+  el.replaceWith(input);
+
+  const save = function () {
+    const previous = document.createElement(el.tagName.toLowerCase());
+    previous.onclick = editData;
+    previous.textContent = input.value;
+    input.replaceWith(previous);
+  };
+  input.addEventListener("blur", save, {
+    once: true,
+  });
+  input.focus();
 }
 
 listInputFocus();

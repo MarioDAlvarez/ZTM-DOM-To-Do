@@ -1,6 +1,7 @@
 var listsContainer = document.querySelector("[data-lists]");
 var newListForm = document.querySelector("[data-new-list-form]");
 var newListInput = document.querySelector("[data-new-list-input]");
+var body = document.querySelector("body");
 
 newListForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -15,6 +16,7 @@ function listInputFocus() {
 }
 
 function createList(name) {
+  var id = Date.now();
   var listTitle = document.createElement("h2");
   listTitle.innerText = name;
   listTitle.setAttribute("class", "text-break");
@@ -22,6 +24,7 @@ function createList(name) {
 
   var closeButton = document.createElement("button");
   closeButton.setAttribute("class", "btn-close");
+
   var div2 = document.createElement("div");
   div2.setAttribute("class", "fodal-header");
   div2.append(listTitle, closeButton);
@@ -34,12 +37,12 @@ function createList(name) {
   var itemInputElement = document.createElement("input");
   itemInputElement.setAttribute("placeholder", "List Item");
   itemInputElement.setAttribute("class", "iteminput col-10");
-  itemInputElement.setAttribute("id", name);
+  itemInputElement.setAttribute("id", id);
   itemInputElement.setAttribute("autocomplete", "off");
 
   var labelElement = document.createElement("label");
   labelElement.setAttribute("class", "row");
-  labelElement.setAttribute("for", name);
+  labelElement.setAttribute("for", id);
   labelElement.append(buttonElement, itemInputElement);
 
   var formElement = document.createElement("form");
@@ -55,34 +58,39 @@ function createList(name) {
   div8.setAttribute("class", "fodal-body");
   div8.append(div3, div4);
 
-  // var clearButton = document.createElement("button");
-  // clearButton.setAttribute("class", "col-6");
-  // clearButton.innerHTML = "Clear Completed";
-  // clearButton.addEventListener("click", (e) => {
-  //   var items = e.target.parentNode.parentNode.getElementsByTagName("li");
-  //   for (i = items.length - 1; i >= 0; i--) {
-  //     if (items.item(i).classList.contains("done") == true) {
-  //       items.item(i).remove();
-  //     }
-  //   }
-  //   itemInputElement.focus();
-  // });
+  var div9 = document.createElement("div");
+  div9.setAttribute("class", "fodal-backdrop");
+  body.append(div9);
 
-  // var deleteButton = document.createElement("button");
-  // deleteButton.setAttribute("class", "col-6");
-  // deleteButton.innerHTML = "Delete List";
-  // deleteButton.addEventListener("click", (e) => {
-  //   e.target.parentNode.parentNode.remove();
-  //   listInputFocus();
-  // });
+  var clearButton = document.createElement("button");
+  clearButton.setAttribute("class", "col-6");
+  clearButton.innerHTML = "Clear Completed";
+  clearButton.addEventListener("click", (e) => {
+    var items = e.target.parentNode.parentNode.getElementsByTagName("label");
+    for (i = items.length - 1; i >= 0; i--) {
+      if (items.item(i).classList.contains("done") == true) {
+        items.item(i).parentNode.remove();
+      }
+    }
+    itemInputElement.focus();
+  });
 
-  // div5.append(clearButton, deleteButton);
-  // var div5 = document.createElement("div");
-  // div5.setAttribute("class", "row");
+  var deleteButton = document.createElement("button");
+  deleteButton.setAttribute("class", "col-6");
+  deleteButton.innerHTML = "Delete List";
+  deleteButton.addEventListener("click", (e) => {
+    e.target.parentNode.parentNode.parentNode.parentNode.remove();
+    div9.remove();
+    listInputFocus();
+  });
+
+  var div5 = document.createElement("div");
+  div5.setAttribute("class", "row fodal-footer");
+  div5.append(clearButton, deleteButton);
 
   var div1 = document.createElement("div");
   div1.setAttribute("class", "fodal-content");
-  div1.append(div2, div8 /*div5*/);
+  div1.append(div2, div8, div5);
   var div6 = document.createElement("div");
   div6.setAttribute("class", "fodal-dialog");
   div6.append(div1);
@@ -100,18 +108,39 @@ function createList(name) {
     itemInputElement.value = "";
   });
 
+  var toggleHide = [closeButton, div3, div5, div9];
+
+  function classToggler() {}
+
+  div7.addEventListener("mousedown", () => {
+    if (closeButton.classList.contains("hidden") == true) {
+      div7.classList.add("fodal");
+      div2.classList.remove("no-underline");
+      removeHidden(toggleHide);
+      removeHidden(listElement.getElementsByTagName("button"));
+    }
+    itemInputElement.focus();
+  });
+
+  closeButton.addEventListener("mouseup", () => {
+    div7.classList.remove("fodal");
+    div2.classList.add("no-underline");
+    addHidden(toggleHide);
+    addHidden(listElement.getElementsByTagName("button"));
+    listInputFocus();
+  });
+
   itemInputElement.focus();
 }
 
 function createListItem(item, list, itemInput) {
   var checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
-  checkbox.setAttribute("id", item);
   checkbox.setAttribute("class", "col-1");
 
   var label = document.createElement("label");
-  label.setAttribute("for", item);
   label.setAttribute("class", "col-9 text-break");
+  label.addEventListener("click", editData);
 
   var li = document.createElement("li");
   li.setAttribute("class", "row align-items-baseline");
@@ -122,7 +151,7 @@ function createListItem(item, list, itemInput) {
     e.target.parentNode.remove();
     itemInput.focus();
   });
-  deleteButton.setAttribute("class", "delete-button col-2");
+  deleteButton.setAttribute("class", "delete-button col-2 delete-button");
 
   label.append(`${item}`);
   li.append(checkbox, label, deleteButton);
@@ -130,10 +159,11 @@ function createListItem(item, list, itemInput) {
   list.insertBefore(li, list.firstChild);
 
   checkbox.addEventListener("click", (e) => {
+    var itemName = e.target.parentNode.childNodes[1];
     var item = e.target.parentNode;
-    item.classList.toggle("done");
+    itemName.classList.toggle("done");
     var list = e.target.parentNode.parentNode;
-    if (item.classList.contains("done") == true) {
+    if (itemName.classList.contains("done") == true) {
       list.appendChild(item);
     } else {
       list.insertBefore(item, list.firstChild);
@@ -143,14 +173,25 @@ function createListItem(item, list, itemInput) {
 
 function editData(e) {
   const el = e.target;
+
   const input = document.createElement("input");
-  input.setAttribute("class", "list-name");
+
+  if (el.classList.contains("done")) {
+    input.setAttribute("class", "col-9 item-name done");
+  } else if (el.tagName == "LABEL") {
+    input.setAttribute("class", "col-9 item-name");
+  } else {
+    input.setAttribute("class", "list-name");
+  }
   input.setAttribute("value", el.textContent);
   input.selectionStart = input.selectionEnd = input.value.length;
   el.replaceWith(input);
 
   const save = function () {
     const previous = document.createElement(el.tagName.toLowerCase());
+    if (el.tagName == "LABEL") {
+      previous.setAttribute("class", "col-9 text-break");
+    }
     previous.onclick = editData;
     previous.textContent = input.value;
     input.replaceWith(previous);
@@ -159,6 +200,18 @@ function editData(e) {
     once: true,
   });
   input.focus();
+}
+
+function addHidden(array) {
+  for (i = 0; i < array.length; i++) {
+    array[i].classList.add("hidden");
+  }
+}
+
+function removeHidden(array) {
+  for (i = 0; i < array.length; i++) {
+    array[i].classList.remove("hidden");
+  }
 }
 
 listInputFocus();
@@ -262,4 +315,4 @@ listInputFocus();
 // 		}
 // 	});
 
-// }
+//

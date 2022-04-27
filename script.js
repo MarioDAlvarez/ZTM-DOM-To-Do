@@ -19,11 +19,24 @@ function createList(name) {
   var id = Date.now();
   var listTitle = document.createElement("h2");
   listTitle.innerText = name;
-  listTitle.setAttribute("class", "text-break");
-  listTitle.addEventListener("click", editData);
+  listTitle.setAttribute("class", "list-name text-break col-10");
+  // listTitle.addEventListener("click", editData);
+  listTitle.addEventListener("click", () => {
+    listTitle.setAttribute("contenteditable", "true");
+    listTitle.focus();
+  });
+  listTitle.addEventListener("blur", () => {
+    listTitle.setAttribute("contenteditable", "false");
+  });
+  listTitle.addEventListener("keydown", (evt) => {
+    if (evt.key === "Enter") {
+      evt.preventDefault();
+    }
+  });
 
   var closeButton = document.createElement("button");
-  closeButton.setAttribute("class", "btn-close");
+  closeButton.innerHTML = "&#215";
+  closeButton.setAttribute("class", "close-button col-2");
 
   var div2 = document.createElement("div");
   div2.setAttribute("class", "fodal-header");
@@ -91,6 +104,7 @@ function createList(name) {
   var div1 = document.createElement("div");
   div1.setAttribute("class", "fodal-content");
   div1.append(div2, div8, div5);
+
   var div6 = document.createElement("div");
   div6.setAttribute("class", "fodal-dialog");
   div6.append(div1);
@@ -106,11 +120,17 @@ function createList(name) {
     if (itemName === "") return;
     createListItem(itemName, listElement, itemInputElement);
     itemInputElement.value = "";
+    itemInputElement.focus();
+  });
+
+  itemInputElement.addEventListener("blur", () => {
+    var itemName = itemInputElement.value;
+    if (itemName === "") return;
+    createListItem(itemName, listElement, itemInputElement);
+    itemInputElement.value = "";
   });
 
   var toggleHide = [closeButton, div3, div5, div9];
-
-  function classToggler() {}
 
   div7.addEventListener("mousedown", () => {
     if (closeButton.classList.contains("hidden") == true) {
@@ -118,6 +138,7 @@ function createList(name) {
       div2.classList.remove("no-underline");
       removeHidden(toggleHide);
       removeHidden(listElement.getElementsByTagName("button"));
+      div8.classList.remove("min-div");
     }
     itemInputElement.focus();
   });
@@ -127,6 +148,7 @@ function createList(name) {
     div2.classList.add("no-underline");
     addHidden(toggleHide);
     addHidden(listElement.getElementsByTagName("button"));
+    div8.classList.add("min-div");
     listInputFocus();
   });
 
@@ -136,22 +158,54 @@ function createList(name) {
 function createListItem(item, list, itemInput) {
   var checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
-  checkbox.setAttribute("class", "col-1");
+  checkbox.setAttribute("class", "col-1 checkbox");
 
   var label = document.createElement("label");
-  label.setAttribute("class", "col-9 text-break");
-  label.addEventListener("click", editData);
+  label.setAttribute("class", "col-9 item-name text-break");
+  // label.setAttribute("contenteditable", "true");
+  // label.addEventListener("click", () => {
+  //   label.parentNode.classList.add("item-border");
+  //   label.parentNode.classList.remove("li-padding");
+  // });
+  label.addEventListener("click", () => {
+    label.setAttribute("contenteditable", "true");
+    label.focus();
+  });
+  label.addEventListener("blur", () => {
+    listTitle.setAttribute("contenteditable", "false");
+  });
+
+  label.addEventListener("keydown", (evt) => {
+    if (evt.key === "Enter") {
+      evt.preventDefault();
+    }
+  });
 
   var li = document.createElement("li");
-  li.setAttribute("class", "row align-items-baseline");
+  li.setAttribute("class", "row align-items-baseline li-padding");
+  li.addEventListener("mouseover", () => {
+    if (
+      itemInput.parentNode.parentNode.parentNode.classList.contains(
+        "hidden"
+      ) === false
+    ) {
+      deleteButton.classList.remove("hidden");
+    }
+  });
+  li.addEventListener("mouseout", () => {
+    deleteButton.classList.add("hidden");
+  });
 
   var deleteButton = document.createElement("button");
-  // deleteButton.innerHTML = "&#215";
+  deleteButton.innerHTML = "&#215";
   deleteButton.addEventListener("click", (e) => {
     e.target.parentNode.remove();
     itemInput.focus();
   });
-  deleteButton.setAttribute("class", "delete-button col-2 delete-button");
+  deleteButton.setAttribute(
+    "class",
+    "delete-button col-2 delete-button hidden"
+  );
 
   label.append(`${item}`);
   li.append(checkbox, label, deleteButton);
@@ -171,36 +225,48 @@ function createListItem(item, list, itemInput) {
   });
 }
 
-function editData(e) {
-  const el = e.target;
+// function editData(e) {
+//   const el = e.target;
+//   if (el.parentNode.tagName == "LI") {
+//     el.parentNode.classList.add("item-border");
+//     el.parentNode.classList.remove("li-padding");
+//   }
 
-  const input = document.createElement("input");
+//   const input = document.createElement("input");
 
-  if (el.classList.contains("done")) {
-    input.setAttribute("class", "col-9 item-name done");
-  } else if (el.tagName == "LABEL") {
-    input.setAttribute("class", "col-9 item-name");
-  } else {
-    input.setAttribute("class", "list-name");
-  }
-  input.setAttribute("value", el.textContent);
-  input.selectionStart = input.selectionEnd = input.value.length;
-  el.replaceWith(input);
+//   if (el.classList.contains("done")) {
+//     input.setAttribute("class", "col-9 item-name text-break done");
+//   } else if (el.tagName == "LABEL") {
+//     input.setAttribute("class", "col-9 item-name text-break");
+//   } else {
+//     input.setAttribute("class", "list-name text-break col-10");
+//   }
+//   input.setAttribute("value", el.textContent);
+//   input.selectionStart = input.selectionEnd = input.value.length;
+//   el.replaceWith(input);
 
-  const save = function () {
-    const previous = document.createElement(el.tagName.toLowerCase());
-    if (el.tagName == "LABEL") {
-      previous.setAttribute("class", "col-9 text-break");
-    }
-    previous.onclick = editData;
-    previous.textContent = input.value;
-    input.replaceWith(previous);
-  };
-  input.addEventListener("blur", save, {
-    once: true,
-  });
-  input.focus();
-}
+//   const save = function () {
+//     const previous = document.createElement(el.tagName.toLowerCase());
+//     if (el.classList.contains("done")) {
+//       previous.setAttribute("class", "col-9 item-name text-break done");
+//     } else if (el.tagName == "LABEL") {
+//       previous.setAttribute("class", "col-9 item-name text-break");
+//     } else {
+//       previous.setAttribute("class", "list-name text-break col-10");
+//     }
+//     previous.onclick = editData;
+//     previous.textContent = input.value;
+//     input.replaceWith(previous);
+//     if (previous.parentNode.tagName == "LI") {
+//       previous.parentNode.classList.remove("item-border");
+//       previous.parentNode.classList.add("li-padding");
+//     }
+//   };
+//   input.addEventListener("blur", save, {
+//     once: true,
+//   });
+//   input.focus();
+// }
 
 function addHidden(array) {
   for (i = 0; i < array.length; i++) {

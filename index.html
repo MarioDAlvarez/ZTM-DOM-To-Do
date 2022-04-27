@@ -10,38 +10,81 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/472f5ed387.js"
+      crossorigin="anonymous"
+    ></script>
     <title>To-Do List</title>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <h1 class="text-center">Lister</h1>
+    <div id="page-container">
+      <div id="content-wrap">
+        <div>
+          <!-- <div class="row"> -->
+          <!-- <div class="col-12">
+              <h1 class="dark-mode-text">Lister</h1>
+            </div> -->
+          <!-- <div class="col-12">
+              <p class="text-center dark-mode-text">
+                Create a name for your list to begin adding items.
+              </p>
+            </div> -->
+          <div>
+            <form data-new-list-form class="text-center">
+              <label for="listinput" class="row justify-content-center">
+                <input
+                  class="plus-button list-name col-1"
+                  type="submit"
+                  value="+"
+                />
+                <input
+                  id="listinput"
+                  class="list-name dark-mode-text list-name-input col-3"
+                  type="text"
+                  name="listInput"
+                  placeholder="Name your list..."
+                  data-new-list-input
+                  autocomplete="off"
+                />
+              </label>
+            </form>
+          </div>
+          <!-- </div> -->
         </div>
-        <div class="col-12">
-          <p class="text-center">
-            Create a name for your list to begin adding items.
-          </p>
-          <form data-new-list-form class="text-center">
-            <label for="listinput">
-              <input type="submit" value="+" />
-              <input
-                id="listinput"
-                class="list-name"
-                type="text"
-                name="listInput"
-                placeholder="List Title"
-                data-new-list-input
-                autocomplete="off"
-              />
-            </label>
-          </form>
+        <div class="container">
+          <div class="row row-cols-1 row-cols-md-4" data-lists></div>
         </div>
       </div>
-    </div>
 
-    <div class="container">
-      <div class="row row-cols-1 row-cols-md-4" data-lists></div>
+      <div class="footer-container">
+        <div class="container">
+          <div class="row">
+            <div class="col-12" id="sig">
+              <p class="p-margin">
+                <small>
+                  <a
+                    href="https://github.com/MarioDAlvarez"
+                    class="social-round-icon white-round-icon fa-icon"
+                    title=""
+                  >
+                    <i class="fa fa-github" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/mario-d-alvarez/"
+                    class="social-round-icon white-round-icon fa-icon"
+                    title=""
+                  >
+                    <i class="fa-brands fa-linkedin-in"></i>
+                  </a>
+                </small>
+              </p>
+              <p class="p-margin">
+                <small>Website created by Mario D Alvarez</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script type="text/javascript" src="script.js"></script>
     <script

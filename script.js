@@ -3,10 +3,15 @@ var newListForm = document.querySelector("[data-new-list-form]");
 var newListInput = document.querySelector("[data-new-list-input]");
 var body = document.querySelector("body");
 
+// window.onload = createList("Title");
+
 newListForm.addEventListener("submit", (e) => {
   e.preventDefault();
   var listName = newListInput.value;
-  if (listName === "") return;
+  if (listName === "") {
+    newListInput.focus();
+    return;
+  }
   createList(listName);
   newListInput.value = "";
 });

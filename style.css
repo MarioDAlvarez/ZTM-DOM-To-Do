@@ -44,8 +44,16 @@ ul {
 }
 
 .plus-button {
-  color: #eb06ff;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  color: #ffffff;
   width: fit-content;
+  height: fit-content;
+  padding: 0.25rem 0.5rem;
+}
+
+.plus-button:hover {
+  color: #3450a1;
 }
 
 .fodal {
@@ -226,7 +234,7 @@ ul {
   text-align: center;
   display: inline-block;
   border-radius: 60px;
-  box-shadow: 0 0 2px #888;
+  box-shadow: 0 0 3px #ffffff;
 }
 
 .footer-container p a {

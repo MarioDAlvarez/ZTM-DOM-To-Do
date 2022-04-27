@@ -41,7 +41,7 @@ function createList(name) {
 
   var closeButton = document.createElement("button");
   closeButton.innerHTML = "&#215";
-  closeButton.setAttribute("class", "close-button col-2");
+  closeButton.setAttribute("class", "btn btn-outline-light close-button col-2");
 
   var div2 = document.createElement("div");
   div2.setAttribute("class", "fodal-header");

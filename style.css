@@ -49,7 +49,12 @@ ul {
   color: #ffffff;
   width: fit-content;
   height: fit-content;
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.7rem 0.7rem;
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 0.75;
+  margin: 1.6rem 0.5rem 0.5rem;
+  border: none;
 }
 
 .plus-button:hover {
@@ -158,9 +163,17 @@ ul {
 
 .close-button {
   font-size: 2.5em;
-  box-sizing: content-box;
   line-height: 0.5;
+  height: fit-content;
+  width: fit-content;
+  padding: 0rem 0.25rem 0.5rem;
+  border: none;
 }
+
+.close-button:hover {
+  color: #041955;
+}
+
 .li-padding {
   padding: 1px 0px;
 }

@@ -84,7 +84,10 @@ function createList(name) {
   body.append(div9);
 
   var clearButton = document.createElement("button");
-  clearButton.setAttribute("class", "col-6");
+  clearButton.setAttribute(
+    "class",
+    "col-5 btn btn-outline-light footer-buttons"
+  );
   clearButton.innerHTML = "Clear Completed";
   clearButton.addEventListener("click", (e) => {
     console.log(div8.getElementsByClassName("item-name"));
@@ -98,7 +101,10 @@ function createList(name) {
   });
 
   var deleteButton = document.createElement("button");
-  deleteButton.setAttribute("class", "col-6");
+  deleteButton.setAttribute(
+    "class",
+    "col-5 btn btn-outline-light footer-buttons"
+  );
   deleteButton.innerHTML = "Delete List";
   deleteButton.addEventListener("click", (e) => {
     div7.remove();
@@ -107,7 +113,7 @@ function createList(name) {
   });
 
   var div5 = document.createElement("div");
-  div5.setAttribute("class", "row fodal-footer");
+  div5.setAttribute("class", "row fodal-footer justify-content-center");
   div5.append(clearButton, deleteButton);
 
   var div1 = document.createElement("div");

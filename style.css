@@ -287,6 +287,17 @@ input[type="checkbox"]:checked {
   background-color: #eb06ff;
 }
 
+.footer-buttons {
+  /* width: fit-content; */
+  height: fit-content;
+  border: none;
+}
+
+.footer-buttons:hover {
+  color: #ffffff;
+  background-color: #eb06ff;
+}
+
 .done {
   text-decoration: line-through;
 }
@@ -302,7 +313,6 @@ input[type="checkbox"]:checked {
 
 ::placeholder {
   color: #ffffff;
-  /* opacity: 0.5; */
 }
 
 .footer-container {

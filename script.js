@@ -50,16 +50,19 @@ function createList(name) {
   var buttonElement = document.createElement("input");
   buttonElement.setAttribute("type", "submit");
   buttonElement.setAttribute("value", "+");
-  buttonElement.setAttribute("class", "col-1");
+  buttonElement.setAttribute(
+    "class",
+    "col-1 btn btn-outline-light list-item-add"
+  );
 
   var itemInputElement = document.createElement("input");
-  itemInputElement.setAttribute("placeholder", "List Item");
+  itemInputElement.setAttribute("placeholder", "Add a task...");
   itemInputElement.setAttribute("class", "iteminput col-10");
   itemInputElement.setAttribute("id", id);
   itemInputElement.setAttribute("autocomplete", "off");
 
   var labelElement = document.createElement("label");
-  labelElement.setAttribute("class", "row");
+  labelElement.setAttribute("class", "row label-margin");
   labelElement.setAttribute("for", id);
   labelElement.append(buttonElement, itemInputElement);
 
@@ -84,7 +87,8 @@ function createList(name) {
   clearButton.setAttribute("class", "col-6");
   clearButton.innerHTML = "Clear Completed";
   clearButton.addEventListener("click", (e) => {
-    var items = e.target.parentNode.parentNode.getElementsByTagName("label");
+    console.log(div8.getElementsByClassName("item-name"));
+    var items = div8.getElementsByClassName("item-name");
     for (i = items.length - 1; i >= 0; i--) {
       if (items.item(i).classList.contains("done") == true) {
         items.item(i).parentNode.remove();
@@ -97,7 +101,7 @@ function createList(name) {
   deleteButton.setAttribute("class", "col-6");
   deleteButton.innerHTML = "Delete List";
   deleteButton.addEventListener("click", (e) => {
-    e.target.parentNode.parentNode.parentNode.parentNode.remove();
+    div7.remove();
     div9.remove();
     listInputFocus();
   });
@@ -122,7 +126,10 @@ function createList(name) {
   formElement.addEventListener("submit", (e) => {
     e.preventDefault();
     var itemName = itemInputElement.value;
-    if (itemName === "") return;
+    if (itemName === "") {
+      itemInputElement.focus();
+      return;
+    }
     createListItem(itemName, listElement, itemInputElement);
     itemInputElement.value = "";
     itemInputElement.focus();
@@ -163,21 +170,20 @@ function createList(name) {
 function createListItem(item, list, itemInput) {
   var checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
-  checkbox.setAttribute("class", "col-1 checkbox");
+  checkbox.setAttribute("class", "checkbox");
+
+  var label2 = document.createElement("label");
+  label2.setAttribute("class", "col-1 checkbox-control");
+  label2.appendChild(checkbox);
 
   var label = document.createElement("label");
   label.setAttribute("class", "col-9 item-name text-break");
-  // label.setAttribute("contenteditable", "true");
-  // label.addEventListener("click", () => {
-  //   label.parentNode.classList.add("item-border");
-  //   label.parentNode.classList.remove("li-padding");
-  // });
   label.addEventListener("click", () => {
     label.setAttribute("contenteditable", "true");
     label.focus();
   });
   label.addEventListener("blur", () => {
-    listTitle.setAttribute("contenteditable", "false");
+    label.setAttribute("contenteditable", "false");
   });
 
   label.addEventListener("keydown", (evt) => {
@@ -213,15 +219,15 @@ function createListItem(item, list, itemInput) {
   );
 
   label.append(`${item}`);
-  li.append(checkbox, label, deleteButton);
+  li.append(label2, label, deleteButton);
 
   list.insertBefore(li, list.firstChild);
 
   checkbox.addEventListener("click", (e) => {
-    var itemName = e.target.parentNode.childNodes[1];
-    var item = e.target.parentNode;
+    var itemName = e.target.parentNode.parentNode.childNodes[1];
+    var item = e.target.parentNode.parentNode;
     itemName.classList.toggle("done");
-    var list = e.target.parentNode.parentNode;
+    var list = e.target.parentNode.parentNode.parentNode;
     if (itemName.classList.contains("done") == true) {
       list.appendChild(item);
     } else {

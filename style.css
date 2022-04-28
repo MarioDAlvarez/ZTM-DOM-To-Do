@@ -24,7 +24,7 @@ input {
   background: none;
   outline: none;
   padding: 0;
-  caret-color: #ffffff;
+  caret-color: #eb06ff;
   color: #ffffff;
 }
 
@@ -47,7 +47,7 @@ ul {
   color: #ffffff;
   width: fit-content;
   height: fit-content;
-  padding: 0.5rem 1rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.75rem;
   font-weight: 500;
   font-size: 2rem;
   line-height: 0.75;
@@ -62,7 +62,8 @@ ul {
   font-weight: 500;
 }
 .plus-button:hover {
-  color: #3450a1;
+  color: #ffffff;
+  background-color: #eb06ff;
 }
 
 .fodal {
@@ -168,25 +169,92 @@ ul {
 
 .close-button {
   font-size: 2.5em;
-  line-height: 0.5;
+  line-height: 1;
   height: fit-content;
   width: fit-content;
-  padding: 0rem 0.25rem 0.5rem;
+  padding: 0rem 0.65rem 0.4rem;
   border: none;
 }
 
 .close-button:hover {
-  color: #041955;
+  color: #ffffff;
+  background-color: #eb06ff;
+}
+
+.label-margin {
+  margin-bottom: 0.5rem;
+}
+
+.list-item-add {
+  font-size: 1.5rem;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.15rem 0.55rem 0.4rem;
+  border: none;
+  margin-left: 0.5rem;
+  line-height: 1;
+}
+
+.list-item-add:hover {
+  color: #ffffff;
+  background-color: #eb06ff;
 }
 
 .li-padding {
   padding: 1px 0px;
 }
 
-.checkbox {
-  font-size: 1rem;
-  line-height: 1.2;
-  padding: 0 12px;
+.checkbox-control {
+  font-family: inherit;
+  font-weight: bold;
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+}
+
+.checkbox-control + .checkbox-control {
+  margin-top: 1em;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #041955;
+  margin: 0;
+  font: inherit;
+  color: #ffffff;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:hover {
+  color: #eb06ff;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+  background-color: #ffffff;
+}
+
+input[type="checkbox"]:checked {
+  color: #eb06ff;
+  background-color: #eb06ff;
 }
 
 .item-name {

@@ -201,7 +201,7 @@ ul {
 }
 
 .li-padding {
-  padding: 1px 0px;
+  margin: 0;
 }
 
 .checkbox-control {
@@ -211,6 +211,9 @@ ul {
   display: grid;
   grid-template-columns: 1em auto;
   gap: 0.5em;
+  padding-left: 0.25rem;
+  padding-right: 0.5rem;
+  width: fit-content;
 }
 
 .checkbox-control + .checkbox-control {
@@ -260,7 +263,9 @@ input[type="checkbox"]:checked {
 .item-name {
   font-size: 1rem;
   line-height: 1.2;
-  padding: 0 12px;
+  padding: 0.4rem 0;
+  cursor: text;
+  width: 80%;
 }
 
 .item-border {
@@ -269,9 +274,17 @@ input[type="checkbox"]:checked {
 }
 
 .delete-button {
-  padding: 0 12px;
-  font-size: 1rem;
-  line-height: 1.2;
+  padding: 0.25rem 0.45rem 0.3rem;
+  font-size: 1.3rem;
+  line-height: 1;
+  width: fit-content;
+  height: fit-content;
+  border: none;
+}
+
+.delete-button:hover {
+  color: #ffffff;
+  background-color: #eb06ff;
 }
 
 .done {
@@ -309,6 +322,7 @@ input[type="checkbox"]:checked {
 
 [contenteditable] {
   outline: 0px solid transparent;
+  caret-color: #eb06ff;
 }
 
 .fa-icon {

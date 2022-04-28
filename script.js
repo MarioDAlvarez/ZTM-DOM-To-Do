@@ -194,7 +194,7 @@ function createListItem(item, list, itemInput) {
 
   var li = document.createElement("li");
   li.setAttribute("class", "row align-items-baseline li-padding");
-  li.addEventListener("mouseover", () => {
+  li.addEventListener("mouseenter", () => {
     if (
       itemInput.parentNode.parentNode.parentNode.classList.contains(
         "hidden"
@@ -203,7 +203,7 @@ function createListItem(item, list, itemInput) {
       deleteButton.classList.remove("hidden");
     }
   });
-  li.addEventListener("mouseout", () => {
+  li.addEventListener("mouseleave", () => {
     deleteButton.classList.add("hidden");
   });
 
@@ -215,7 +215,7 @@ function createListItem(item, list, itemInput) {
   });
   deleteButton.setAttribute(
     "class",
-    "delete-button col-2 delete-button hidden"
+    "col-2 delete-button btn btn-outline-light hidden"
   );
 
   label.append(`${item}`);

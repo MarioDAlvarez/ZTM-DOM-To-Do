@@ -3,7 +3,45 @@ var newListForm = document.querySelector("[data-new-list-form]");
 var newListInput = document.querySelector("[data-new-list-input]");
 var body = document.querySelector("body");
 
-// window.onload = createList("Title");
+window.onload = () => {
+  createList("Sample List");
+
+  var sampleList = listsContainer.firstChild;
+  var list = sampleList.querySelector("ul");
+
+  createListItem("Item1", list);
+  createListItem("Item2", list);
+
+  var checkedItem = list.firstChild.querySelector("input");
+  checkedItem.setAttribute("checked", "true");
+  checkedItem.parentNode.nextElementSibling.classList.add("done");
+
+  list.append(checkedItem.parentNode.parentNode);
+
+  var close = sampleList.getElementsByClassName("close-button");
+  var input = sampleList.getElementsByClassName("form-element");
+  var footer = sampleList.getElementsByClassName("fodal-footer");
+  var backdrop = document.getElementsByClassName("fodal-backdrop");
+  var hide = [close.item(0), input.item(0), footer.item(0), backdrop.item(0)];
+
+  addHidden(hide);
+
+  for (button of list.getElementsByTagName("input")) {
+    button.classList.remove("checkbox");
+  }
+
+  sampleList.classList.remove("fodal");
+  sampleList.addEventListener("mouseenter", () => {});
+  listInputFocus();
+};
+
+document.addEventListener("copy", function (e) {
+  const text_only = document.getSelection().toString();
+  const clipdata = e.clipboardData || window.clipboardData;
+  clipdata.setData("text/plain", text_only);
+  clipdata.setData("text/html", text_only);
+  e.preventDefault();
+});
 
 newListForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -25,12 +63,16 @@ function createList(name) {
   var listTitle = document.createElement("h2");
   listTitle.innerText = name;
   listTitle.setAttribute("class", "list-name text-break col-10");
-  // listTitle.addEventListener("click", editData);
   listTitle.addEventListener("click", () => {
     listTitle.setAttribute("contenteditable", "true");
     listTitle.focus();
   });
   listTitle.addEventListener("blur", () => {
+    console.log(listTitle.innerHTML);
+    if (listTitle.innerHTML == "") {
+      console.log("working");
+      listTitle.innerHTML = "Title";
+    }
     listTitle.setAttribute("contenteditable", "false");
   });
   listTitle.addEventListener("keydown", (evt) => {
@@ -58,7 +100,6 @@ function createList(name) {
   var itemInputElement = document.createElement("input");
   itemInputElement.setAttribute("placeholder", "Add a task...");
   itemInputElement.setAttribute("class", "iteminput col-10");
-  itemInputElement.setAttribute("id", id);
   itemInputElement.setAttribute("autocomplete", "off");
 
   var labelElement = document.createElement("label");
@@ -69,6 +110,7 @@ function createList(name) {
   var formElement = document.createElement("form");
   formElement.append(labelElement);
   var div3 = document.createElement("div");
+  div3.classList.add("form-element");
   div3.append(formElement);
 
   var listElement = document.createElement("ul");
@@ -86,7 +128,7 @@ function createList(name) {
   var clearButton = document.createElement("button");
   clearButton.setAttribute(
     "class",
-    "col-5 btn btn-outline-light footer-buttons"
+    "col-12 col-md-5 btn btn-outline-light footer-buttons margin-bottom"
   );
   clearButton.innerHTML = "Clear Completed";
   clearButton.addEventListener("click", (e) => {
@@ -103,7 +145,7 @@ function createList(name) {
   var deleteButton = document.createElement("button");
   deleteButton.setAttribute(
     "class",
-    "col-5 btn btn-outline-light footer-buttons"
+    "col-12 col-md-5 btn btn-outline-light footer-buttons"
   );
   deleteButton.innerHTML = "Delete List";
   deleteButton.addEventListener("click", (e) => {
@@ -125,6 +167,7 @@ function createList(name) {
   div6.append(div1);
   var div7 = document.createElement("div");
   div7.setAttribute("class", "fodal");
+  div7.setAttribute("id", id);
   div7.append(div6);
 
   listsContainer.appendChild(div7);
@@ -136,7 +179,7 @@ function createList(name) {
       itemInputElement.focus();
       return;
     }
-    createListItem(itemName, listElement, itemInputElement);
+    createListItem(itemName, listElement);
     itemInputElement.value = "";
     itemInputElement.focus();
   });
@@ -153,27 +196,37 @@ function createList(name) {
   div7.addEventListener("mousedown", () => {
     if (closeButton.classList.contains("hidden") == true) {
       div7.classList.add("fodal");
-      div2.classList.remove("no-underline");
       removeHidden(toggleHide);
-      removeHidden(listElement.getElementsByTagName("button"));
-      div8.classList.remove("min-div");
+      div1.classList.remove("min-div");
+      div8.classList.remove("body-overflow");
+      div2.classList.remove("line-clamp");
+      for (button of listElement.getElementsByTagName("input")) {
+        button.classList.add("checkbox");
+      }
     }
     itemInputElement.focus();
   });
 
   closeButton.addEventListener("mouseup", () => {
     div7.classList.remove("fodal");
-    div2.classList.add("no-underline");
     addHidden(toggleHide);
-    addHidden(listElement.getElementsByTagName("button"));
-    div8.classList.add("min-div");
+    div1.classList.add("min-div");
+    div8.classList.add("body-overflow");
+    div2.classList.add("line-clamp");
+    for (button of listElement.getElementsByTagName("input")) {
+      button.classList.remove("checkbox");
+    }
+    for (name of listElement.getElementsByClassName("item-name")) {
+      name.classList.add("line-clamp-item");
+    }
+
     listInputFocus();
   });
 
   itemInputElement.focus();
 }
 
-function createListItem(item, list, itemInput) {
+function createListItem(item, list) {
   var checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("class", "checkbox");
@@ -202,9 +255,8 @@ function createListItem(item, list, itemInput) {
   li.setAttribute("class", "row align-items-baseline li-padding");
   li.addEventListener("mouseenter", () => {
     if (
-      itemInput.parentNode.parentNode.parentNode.classList.contains(
-        "hidden"
-      ) === false
+      list.parentNode.parentNode.firstChild.classList.contains("hidden") ===
+      false
     ) {
       deleteButton.classList.remove("hidden");
     }
@@ -242,49 +294,6 @@ function createListItem(item, list, itemInput) {
   });
 }
 
-// function editData(e) {
-//   const el = e.target;
-//   if (el.parentNode.tagName == "LI") {
-//     el.parentNode.classList.add("item-border");
-//     el.parentNode.classList.remove("li-padding");
-//   }
-
-//   const input = document.createElement("input");
-
-//   if (el.classList.contains("done")) {
-//     input.setAttribute("class", "col-9 item-name text-break done");
-//   } else if (el.tagName == "LABEL") {
-//     input.setAttribute("class", "col-9 item-name text-break");
-//   } else {
-//     input.setAttribute("class", "list-name text-break col-10");
-//   }
-//   input.setAttribute("value", el.textContent);
-//   input.selectionStart = input.selectionEnd = input.value.length;
-//   el.replaceWith(input);
-
-//   const save = function () {
-//     const previous = document.createElement(el.tagName.toLowerCase());
-//     if (el.classList.contains("done")) {
-//       previous.setAttribute("class", "col-9 item-name text-break done");
-//     } else if (el.tagName == "LABEL") {
-//       previous.setAttribute("class", "col-9 item-name text-break");
-//     } else {
-//       previous.setAttribute("class", "list-name text-break col-10");
-//     }
-//     previous.onclick = editData;
-//     previous.textContent = input.value;
-//     input.replaceWith(previous);
-//     if (previous.parentNode.tagName == "LI") {
-//       previous.parentNode.classList.remove("item-border");
-//       previous.parentNode.classList.add("li-padding");
-//     }
-//   };
-//   input.addEventListener("blur", save, {
-//     once: true,
-//   });
-//   input.focus();
-// }
-
 function addHidden(array) {
   for (i = 0; i < array.length; i++) {
     array[i].classList.add("hidden");
@@ -298,104 +307,3 @@ function removeHidden(array) {
 }
 
 listInputFocus();
-
-// function toggleDone() {
-//   console.log(object);
-
-// }
-
-// function createTaskInput(){
-// 	var itemInput = document.createElement("input")
-// 	itemInput.setAttribute("type", "text");
-// 	itemInput.setAttribute("placeholder", "List Item");
-// 	itemInput.setAttribute("class", "item-input")
-
-// }
-// console.log(itemInput);
-
-// function listInputLength() {
-// 	return listInput.value.length;
-// }
-
-// function addListAfterClick() {
-// 	if (listInputLength() > 0) {
-// 		createList();
-// 	}
-// }
-
-// function addListAfterKeypress(event) {
-// 	if (listInputLength() > 0 && event.keyCode === 13) {
-// 		createList();
-// 	}
-// }
-
-// function createList() {
-// 	var itemInput = document.createElement("input")
-// 	itemInput.setAttribute("type", "text");
-// 	itemInput.setAttribute("placeholder", "List Item");
-// 	itemInput.setAttribute("class", "item-input")
-
-// 	var list = document.createElement("ul");
-// 	var deleteButton = createDeleteButton();
-// 	var listTitle = document.createElement("h2");
-// 	var div1 = document.createElement("div");
-// 	var div2 = document.createElement("div");
-
-// 	listTitle.innerHTML = `${listInput.value}`;
-// 	listTitle.appendChild(deleteButton);
-// 	listTitle.appendChild(div2);
-// 	div2.appendChild(itemInput);
-// 	div2.appendChild(list);
-// 	div1.appendChild(listTitle);
-// 	listDiv.appendChild(div1);
-// 	listInput.value = "";
-// 	itemInput.focus();
-// }
-
-// function createDeleteButton () {
-// 	var deleteButton = document.createElement("button");
-// 	deleteButton.innerHTML = "Delete"
-// 	deleteButton.addEventListener("click", deleteLi)
-// 	return deleteButton;
-// }
-
-// button.addEventListener("click", addListAfterClick);
-
-// listInput.addEventListener("keypress", addListAfterKeypress);
-
-// function createItemInput() {
-// 	var itemInput = document.createElement("input");
-// 	itemInput.setAttribute("type", "text");
-// 	itemInput.setAttribute("placeholder", "List Item");
-// 	var itemInuputLength = itemInput.value.length;
-// 	itemInput.addEventListener("keypress", function() {
-// 		function addItemAfterKeypress(event) {
-// 			if (itemInuputLength > 0 && event.keyCode === 13) {
-
-// 				function addListItem() {
-// 					var checkbox = document.createElement("input");
-// 					checkbox.setAttribute("type", "checkbox");
-// 					checkbox.setAttribute("id", itemInput.value);
-// 					checkbox.addEventListener('click', toggleDone);
-
-// 					var label = document.createElement("label");
-// 					label.setAttribute("for", itemInput.value);
-
-// 					var li = document.createElement("li");
-
-// 					var deleteButton = document.createElement("button");
-// 					deleteButton.innerHTML = "Delete";
-// 					deleteButton.addEventListener("click", deleteLi);
-
-// 					label.appendChild(checkbox);
-// 					label.append(`${itemInput.value}`);
-// 					label.appendChild(deleteButton);
-// 					li.appendChild(label);
-
-// 					itemInput.value = "";
-// 				}
-// 			}
-// 		}
-// 	});
-
-//

@@ -59,7 +59,6 @@ function listInputFocus() {
 }
 
 function createList(name) {
-  var id = Date.now();
   var listTitle = document.createElement("h2");
   listTitle.innerText = name;
   listTitle.setAttribute("class", "list-name text-break col-10");
@@ -104,7 +103,6 @@ function createList(name) {
 
   var labelElement = document.createElement("label");
   labelElement.setAttribute("class", "row label-margin");
-  labelElement.setAttribute("for", id);
   labelElement.append(buttonElement, itemInputElement);
 
   var formElement = document.createElement("form");
@@ -167,7 +165,6 @@ function createList(name) {
   div6.append(div1);
   var div7 = document.createElement("div");
   div7.setAttribute("class", "fodal");
-  div7.setAttribute("id", id);
   div7.append(div6);
 
   listsContainer.appendChild(div7);
